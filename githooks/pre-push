@@ -18,17 +18,17 @@ do_exit(){
 }
 
 do_success(){
-  echo "Pass on pre-commit on git Hook"
+  echo "Pass on pre-commit on git Hook."
   exit 0
 }
 
 #var1="git push --force origin"
-block_force="force"
-block_f="\-f"
+block_force='force'
+block_f='\-f'
 
-if [ "$push_command" =~ $block_force ]; then
+if [[ $push_command =~ $block_force ]]; then
   do_exit
-elif [ "$var1" =~ $block_f ]; then
+elif [[ $push_command =~ $block_f ]]; then
   do_exit
 else
   do_success
