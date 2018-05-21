@@ -25,9 +25,9 @@ do_success(){
 block_force='force'
 block_f='\-f'
 
-if [ $push_command =~ $block_force ]; then
+if [[ "$push_command" =~ $block_force ]]; then
   do_exit
-elif [ "$var1" =~ $block_f ]; then
+elif [[ "$var1" =~ $block_f ]]; then
   do_exit
 else
   do_success
