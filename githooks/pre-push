@@ -1,0 +1,25 @@
+#!/bin/sh
+
+#
+#   <local ref> <local sha1> <remote ref> <remote sha1>
+#
+# This sample shows how to prevent push of commits where the log message starts
+# with "WIP" (work in progress).
+
+remote="$1"
+url="$2"
+
+z40=0000000000000000000000000000000000000000
+
+while read local_ref local_sha remote_ref remote_sha
+do
+	# Check for WIP commit
+		commit=`git rev-list -n 1 --grep '*--force*' "$range"`
+		if [ -n "$commit" ]
+		then
+			echo >&2 "Git's push --force is strongly discouraged as it can destroy other commits already pushed, NOT PUSHING."
+			exit 1
+		fi
+done
+
+exit 0
