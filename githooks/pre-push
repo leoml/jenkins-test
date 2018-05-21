@@ -3,8 +3,6 @@
 
 policy='[Policy] Never force push  the branch! (Prevented with pre-push hook.)'
 
-current_branch=$(git symbolic-ref HEAD | sed -e 's,.*/\(.*\),\1,')
-
 push_command=$(ps -ocommand= -p $PPID)
 
 echo $push_command 
@@ -18,11 +16,22 @@ do_exit(){
   exit 1
 }
 
-if [[ $push_command =~ $is_destructive ]] ; then
-  echo " regra de hook"
-  do_exit
-fi
+do_success(){
+  echo "Pass on pre-commit on git Hook"
+  exit 0
+}
 
+#var1="git push --force origin"
+block_force='force'
+block_f='\-f'
+
+if [[ $push_command =~ $block_force ]]; then
+  do_exit
+elif [[ "$var1" =~ $block_f ]]; then
+  do_exit
+else
+  do_success
+fi
 
 unset do_exit
 
