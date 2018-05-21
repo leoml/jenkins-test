@@ -28,8 +28,6 @@ block_f="\-f"
 
 if [[ "$push_command" =~ $block_force ]]; then
   do_exit
-elif [[ "$push_command" =~ $block_f ]]; then
-  do_exit
 else
   do_success
 fi
