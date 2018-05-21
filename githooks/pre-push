@@ -1,25 +1,34 @@
 #!/bin/sh
 
-#
-#   <local ref> <local sha1> <remote ref> <remote sha1>
-#
-# This sample shows how to prevent push of commits where the log message starts
-# with "WIP" (work in progress).
+protected_branch='master'
 
-remote="$1"
-url="$2"
+policy='[Policy] Never force push or delete the '$protected_branch' branch! (Prevented with pre-push hook.)'
 
-z40=0000000000000000000000000000000000000000
+current_branch=$(git symbolic-ref HEAD | sed -e 's,.*/\(.*\),\1,')
 
-while read local_ref local_sha remote_ref remote_sha
-do
-	# Check for WIP commit
-		commit=`git rev-list -n 1 --grep '*--force*' "$range"`
-		if [ -n "$commit" ]
-		then
-			echo >&2 "Git's push --force is strongly discouraged as it can destroy other commits already pushed, NOT PUSHING."
-			exit 1
-		fi
-done
+push_command=$(ps -ocommand= -p $PPID)
+
+is_destructive='force\-f'
+
+will_remove_protected_branch=':'$protected_branch
+
+do_exit(){
+  echo $policy
+  exit 1
+}
+
+if [[ $push_command =~ $is_destructive ]] && [ $current_branch = $protected_branch ]; then
+  do_exit
+fi
+
+if [[ $push_command =~ $is_destructive ]] && [[ $push_command =~ $protected_branch ]]; then
+  do_exit
+fi
+
+if [[ $push_command =~ $will_remove_protected_branch ]]; then
+  do_exit
+fi
+
+unset do_exit
 
 exit 0
