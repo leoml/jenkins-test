@@ -1,26 +1,18 @@
 #!/bin/bash 
 
-
 policy='[Policy] Never force push  the branch! (Prevented with pre-push hook.)'
 
-#push_command=$(ps -ocommand= -p $PPID)
 
-#comando_win=`WMIC /OUTPUT:STDOUT PROCESS get Caption, Commandline, Processid | grep "git"`
-#echo $comando_win
-
-echo $push_command 
-echo "LEO LEO"
-
-
+# Test SO Linux or Windows
 if [ -f /etc/passwd ]; then
+
   push_command=$(ps -ocommand= -p $PPID)
-  echo "Sou um SO Linux" 
+
 else
+
   push_command=$(WMIC /OUTPUT:STDOUT PROCESS get Caption, Commandline, Processid | grep "git")
-  echo "Sou um SO BOSTAAAA" 
 
 fi
-
 
 do_exit(){
   echo $policy
