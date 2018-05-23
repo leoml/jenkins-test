@@ -33,7 +33,7 @@ do_success(){
 }
 
 block_force=".*git.*push.*\-\-force"
-block_f=".*git.*push.*"
+block_f=".*git.*push.*\-f"
 
 if [[ "$push_command" =~ $block_force || "$push_command" =~ $block_f ]]; then
   do_exit
